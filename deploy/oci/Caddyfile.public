@@ -1,0 +1,38 @@
+{$MAUSAM_API_HOSTNAME} {
+ encode zstd gzip
+ header {
+  Strict-Transport-Security "max-age=31536000"
+  X-Content-Type-Options "nosniff"
+  Referrer-Policy "no-referrer"
+  -Server
+ }
+ @mosdac {
+  method GET HEAD
+  path /public/mosdac
+ }
+ handle @mosdac {
+  root * /public
+  rewrite * /mosdac-status.json
+  header Cache-Control "no-store"
+  file_server
+ }
+ @public {
+  method GET HEAD OPTIONS
+  path /public/status /public/rain-verification /public/shadow-rain /public/shadow-rain/point /public/multi-shadow /public/multi-shadow/point /public/imd-gauge /public/products/*
+ }
+ handle @public {
+  @origin expression `{http.request.header.Origin} == "https://mausamsetu-mauve.vercel.app" || {http.request.header.Origin} == "https://mausamsetu-phoenix750s-projects.vercel.app"`
+  header @origin {
+   Access-Control-Allow-Origin "{http.request.header.Origin}"
+   Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+   Access-Control-Allow-Headers "Content-Type"
+   Vary "Origin"
+  }
+  @preflight method OPTIONS
+  respond @preflight 204
+  reverse_proxy 127.0.0.1:8000
+ }
+ handle {
+  respond "Not found" 404
+ }
+}

@@ -1,0 +1,22 @@
+# Optional containerized frontend. The local launchd frontend uses 4173 instead.
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    environment:
+      MAUSAM_PUBLIC_BACKEND_URL: http://api:8000
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: '1'
+    ports: ['127.0.0.1:4174:3000']
+    restart: unless-stopped
+    depends_on:
+      api: {condition: service_healthy}
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/api/runtime').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

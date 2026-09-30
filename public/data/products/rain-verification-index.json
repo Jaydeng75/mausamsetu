@@ -1,0 +1,265 @@
+{
+  "generated_at": "2026-09-26T20:52:08.165133+00:00",
+  "policy": "Satellite references are reported separately; scores are never pooled into a single truth metric.",
+  "rows": [
+    {
+      "lead_hours": 24,
+      "limitations": [
+        "Satellite precipitation is a verification reference, not gauge ground truth.",
+        "Forecast values are the current browser-grid fields; this is not an operational calibration study.",
+        "Scores from CMORPH and IMERG are kept separate and are not pooled.",
+        "Equal blend is an uncalibrated deterministic baseline."
+      ],
+      "reference_id": "noaa-cmorph2-nrt-025",
+      "reference_kind": "satellite precipitation estimate",
+      "reference_product": "NOAA CPC CMORPH2 NRT 0.25\u00b0 30-minute",
+      "run_id": "public-20260925-00",
+      "scores": [
+        {
+          "bias": 0.3484635613213059,
+          "mae": 5.1402321439604455,
+          "model": "GFS",
+          "n": 1224,
+          "rmse": 12.174674188002106,
+          "thresholds": {
+            "115.6": {
+              "bias": 0.3484635613213059,
+              "brier": 0.004901960784313725,
+              "coverage_fraction": 1.0,
+              "csi": 0.0,
+              "false_alarms": 4,
+              "far": 1.0,
+              "hits": 0,
+              "mae": 5.1402321439604455,
+              "misses": 2,
+              "n": 1224,
+              "pod": 0.0,
+              "rmse": 12.174674188002106
+            },
+            "64.5": {
+              "bias": 0.3484635613213059,
+              "brier": 0.022058823529411766,
+              "coverage_fraction": 1.0,
+              "csi": 0.2702702702702703,
+              "false_alarms": 16,
+              "far": 0.6153846153846154,
+              "hits": 10,
+              "mae": 5.1402321439604455,
+              "misses": 11,
+              "n": 1224,
+              "pod": 0.47619047619047616,
+              "rmse": 12.174674188002106
+            }
+          }
+        },
+        {
+          "bias": 0.15066209073307046,
+          "mae": 4.470121555324801,
+          "model": "AIFS",
+          "n": 1224,
+          "rmse": 10.321650593243307,
+          "thresholds": {
+            "115.6": {
+              "bias": 0.15066209073307046,
+              "brier": 0.0024509803921568627,
+              "coverage_fraction": 1.0,
+              "csi": 0.0,
+              "false_alarms": 1,
+              "far": 1.0,
+              "hits": 0,
+              "mae": 4.470121555324801,
+              "misses": 2,
+              "n": 1224,
+              "pod": 0.0,
+              "rmse": 10.321650593243307
+            },
+            "64.5": {
+              "bias": 0.15066209073307046,
+              "brier": 0.021241830065359478,
+              "coverage_fraction": 1.0,
+              "csi": 0.21212121212121213,
+              "false_alarms": 12,
+              "far": 0.631578947368421,
+              "hits": 7,
+              "mae": 4.470121555324801,
+              "misses": 14,
+              "n": 1224,
+              "pod": 0.3333333333333333,
+              "rmse": 10.321650593243307
+            }
+          }
+        },
+        {
+          "bias": 0.2495628260271879,
+          "mae": 4.571049222507378,
+          "model": "Equal blend",
+          "n": 1224,
+          "rmse": 10.640854975500389,
+          "thresholds": {
+            "115.6": {
+              "bias": 0.2495628260271879,
+              "brier": 0.004084967320261438,
+              "coverage_fraction": 1.0,
+              "csi": 0.0,
+              "false_alarms": 3,
+              "far": 1.0,
+              "hits": 0,
+              "mae": 4.571049222507378,
+              "misses": 2,
+              "n": 1224,
+              "pod": 0.0,
+              "rmse": 10.640854975500389
+            },
+            "64.5": {
+              "bias": 0.2495628260271879,
+              "brier": 0.018790849673202614,
+              "coverage_fraction": 1.0,
+              "csi": 0.30303030303030304,
+              "false_alarms": 12,
+              "far": 0.5454545454545454,
+              "hits": 10,
+              "mae": 4.571049222507378,
+              "misses": 11,
+              "n": 1224,
+              "pod": 0.47619047619047616,
+              "rmse": 10.640854975500389
+            }
+          }
+        }
+      ],
+      "valid_end": "2026-09-26T00:00:00+00:00",
+      "valid_start": "2026-09-25T00:00:00+00:00",
+      "verification_id": "d5797fb45a1d6a25c6ebd2f59f61383e976f587e6a553fa67fb61b73f1e9cb69"
+    },
+    {
+      "lead_hours": 24,
+      "limitations": [
+        "Satellite precipitation is a verification reference, not gauge ground truth.",
+        "Forecast values are the current browser-grid fields; this is not an operational calibration study.",
+        "Scores from CMORPH and IMERG are kept separate and are not pooled.",
+        "Equal blend is an uncalibrated deterministic baseline."
+      ],
+      "reference_id": "nasa-imerg-early-gis-v07",
+      "reference_kind": "satellite precipitation estimate",
+      "reference_product": "NASA GPM IMERG Early Run GIS one-day accumulation",
+      "run_id": "public-20260925-00",
+      "scores": [
+        {
+          "bias": 0.48062796385778633,
+          "mae": 4.680289938248475,
+          "model": "GFS",
+          "n": 1224,
+          "rmse": 10.44252408800695,
+          "thresholds": {
+            "115.6": {
+              "bias": 0.48062796385778633,
+              "brier": 0.0032679738562091504,
+              "coverage_fraction": 1.0,
+              "csi": 0.0,
+              "false_alarms": 4,
+              "far": 1.0,
+              "hits": 0,
+              "mae": 4.680289938248475,
+              "misses": 0,
+              "n": 1224,
+              "pod": null,
+              "rmse": 10.44252408800695
+            },
+            "64.5": {
+              "bias": 0.48062796385778633,
+              "brier": 0.022058823529411766,
+              "coverage_fraction": 1.0,
+              "csi": 0.25,
+              "false_alarms": 17,
+              "far": 0.6538461538461539,
+              "hits": 9,
+              "mae": 4.680289938248475,
+              "misses": 10,
+              "n": 1224,
+              "pod": 0.47368421052631576,
+              "rmse": 10.44252408800695
+            }
+          }
+        },
+        {
+          "bias": 0.2828264932695508,
+          "mae": 3.8066144560914963,
+          "model": "AIFS",
+          "n": 1224,
+          "rmse": 8.05006293234507,
+          "thresholds": {
+            "115.6": {
+              "bias": 0.2828264932695508,
+              "brier": 0.0008169934640522876,
+              "coverage_fraction": 1.0,
+              "csi": 0.0,
+              "false_alarms": 1,
+              "far": 1.0,
+              "hits": 0,
+              "mae": 3.8066144560914963,
+              "misses": 0,
+              "n": 1224,
+              "pod": null,
+              "rmse": 8.05006293234507
+            },
+            "64.5": {
+              "bias": 0.2828264932695508,
+              "brier": 0.014705882352941176,
+              "coverage_fraction": 1.0,
+              "csi": 0.35714285714285715,
+              "false_alarms": 9,
+              "far": 0.47368421052631576,
+              "hits": 10,
+              "mae": 3.8066144560914963,
+              "misses": 9,
+              "n": 1224,
+              "pod": 0.5263157894736842,
+              "rmse": 8.05006293234507
+            }
+          }
+        },
+        {
+          "bias": 0.3817272285636687,
+          "mae": 3.9978257564426904,
+          "model": "Equal blend",
+          "n": 1224,
+          "rmse": 8.53071653525012,
+          "thresholds": {
+            "115.6": {
+              "bias": 0.3817272285636687,
+              "brier": 0.0024509803921568627,
+              "coverage_fraction": 1.0,
+              "csi": 0.0,
+              "false_alarms": 3,
+              "far": 1.0,
+              "hits": 0,
+              "mae": 3.9978257564426904,
+              "misses": 0,
+              "n": 1224,
+              "pod": null,
+              "rmse": 8.53071653525012
+            },
+            "64.5": {
+              "bias": 0.3817272285636687,
+              "brier": 0.01715686274509804,
+              "coverage_fraction": 1.0,
+              "csi": 0.3225806451612903,
+              "false_alarms": 12,
+              "far": 0.5454545454545454,
+              "hits": 10,
+              "mae": 3.9978257564426904,
+              "misses": 9,
+              "n": 1224,
+              "pod": 0.5263157894736842,
+              "rmse": 8.53071653525012
+            }
+          }
+        }
+      ],
+      "valid_end": "2026-09-26T00:00:00+00:00",
+      "valid_start": "2026-09-25T00:00:00+00:00",
+      "verification_id": "727d784f0777aa22d693d8e7394c27c9ab653f8c44f233e74622fb33a389c0e9"
+    }
+  ],
+  "schema_version": 1
+}

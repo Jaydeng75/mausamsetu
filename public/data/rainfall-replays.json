@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "adaptive_mean_mm": 102.56899515238828,
+      "adaptive_minus_static_crps": -1.1358942842165973,
+      "adaptive_p_gt_64_5": 1.0,
+      "initialization": "2020-10-21T00:00:00.000000000",
+      "label": "detected_extreme",
+      "lat": 25.49999999999999,
+      "lead_hours": 72,
+      "lon": 91.5,
+      "observed_mm": 143.89329528808594,
+      "reference": "ERA5 reanalysis",
+      "source_means_mm": {
+        "GraphCast-WB2": 109.78165040623978,
+        "IFS-HRES-WB2": 81.2184449231528
+      },
+      "static_mean_mm": 100.60895749714894
+    },
+    {
+      "adaptive_mean_mm": 76.26578425867876,
+      "adaptive_minus_static_crps": -4.7486517353052875,
+      "adaptive_p_gt_64_5": 1.0,
+      "initialization": "2020-09-21T00:00:00.000000000",
+      "label": "false_alarm_at_0_5",
+      "lat": 16.499999999999993,
+      "lead_hours": 24,
+      "lon": 70.5,
+      "observed_mm": 53.72371292114258,
+      "reference": "ERA5 reanalysis",
+      "source_means_mm": {
+        "GraphCast-WB2": 71.53643403661087,
+        "IFS-HRES-WB2": 121.38305673955904
+      },
+      "static_mean_mm": 87.54401283865377
+    },
+    {
+      "adaptive_mean_mm": 1.6338567816650733,
+      "adaptive_minus_static_crps": 0.002714582134076604,
+      "adaptive_p_gt_64_5": 0.0,
+      "initialization": "2020-09-11T00:00:00.000000000",
+      "label": "ordinary_case",
+      "lat": 36.0,
+      "lead_hours": 24,
+      "lon": 94.5,
+      "observed_mm": 1.633914589881897,
+      "reference": "ERA5 reanalysis",
+      "source_means_mm": {
+        "GraphCast-WB2": 2.1061707557423506,
+        "IFS-HRES-WB2": 0.7050210931658564
+      },
+      "static_mean_mm": 1.6562102083485852
+    }
+  ],
+  "reference": "ERA5 reanalysis",
+  "schema_version": 1,
+  "selection": "Algorithmic held-out examples: best adaptive extreme, highest-probability non-event, and ordinary case."
+}

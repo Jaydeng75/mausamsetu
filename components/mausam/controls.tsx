@@ -1,0 +1,4 @@
+'use client';
+import {Select,SelectTrigger,SelectValue,SelectContent,SelectItem} from '@/components/ui/select';
+export function Picker({value,onChange,options,label,className=''}:{value:string;onChange:(s:string)=>void;options:{value:string;label:string}[];label:string;className?:string}){return <Select value={value} onValueChange={onChange}><SelectTrigger className={'picker '+className} aria-label={label}><SelectValue/></SelectTrigger><SelectContent>{options.map(o=><SelectItem value={o.value} key={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>;}
+export function downloadFile(filename:string,data:string,type='application/json'){const url=URL.createObjectURL(new Blob([data],{type}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}

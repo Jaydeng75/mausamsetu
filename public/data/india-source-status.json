@@ -1,0 +1,69 @@
+{
+  "checked_at": "2026-09-27T16:52:55.695143+00:00",
+  "policy": "Readiness only. Provider reachability is not scientific acceptance or redistribution permission.",
+  "providers": [
+    {
+      "http_status": 401,
+      "name": "IMD API",
+      "note": "Official portal is reachable; this numerical endpoint requires approved access/IP whitelisting.",
+      "role": "verification",
+      "status": "access_required"
+    },
+    {
+      "http_status": 200,
+      "latest_identifier": "rain_ind0.25_26_09_27.grd",
+      "latest_valid_interval": "2026-09-26T03:00:00Z/2026-09-27T03:00:00Z",
+      "name": "IMD realtime 0.25\u00b0 rainfall",
+      "note": "Public 0.25\u00b0 gauge-gridded binary validated; exact 03:00\u219203:00 UTC scoring pipeline is enabled.",
+      "role": "gauge_gridded_verification",
+      "status": "realtime_grid_ready"
+    },
+    {
+      "name": "IMD 0.25\u00b0 rainfall",
+      "note": "The file does not encode accumulation interval bounds; confirm the IMD daily reporting window before exact forecast verification.",
+      "product": "0.25 degree daily gridded rainfall",
+      "role": "historical_verification",
+      "status": "historical_grid_staged",
+      "units": "mm",
+      "year": 2020
+    },
+    {
+      "catalogue_results": 42694,
+      "dataset_id": "3SIMG_L2G_IMR",
+      "latest_identifier": "3SIMG_27SEP2026_1600_L2G_IMR_V01R00.h5",
+      "latest_valid_interval": "2026-09-27T16:00:00Z/2026-09-27T16:30:00Z",
+      "name": "MOSDAC",
+      "note": "Catalogue search is public. Numerical HDF5 download requires an authorized MOSDAC account.",
+      "role": "satellite_verification_and_context",
+      "status": "catalogue_ready_download_credentials_required"
+    },
+    {
+      "error_type": "ConnectError",
+      "name": "INCOIS ERDDAP",
+      "note": "TLS verification was not disabled; configure an approved CA bundle if required.",
+      "role": "historical_ocean_context",
+      "status": "tls_configuration_required"
+    },
+    {
+      "delay_hours": 48,
+      "name": "NEPS / TIGGE",
+      "public_projection": false,
+      "retrieved_at": null,
+      "role": "delayed_research_forecast",
+      "status": "local_research_sample_ready"
+    },
+    {
+      "name": "NCUM",
+      "public_projection": false,
+      "role": "institutional_forecast",
+      "status": "access_required"
+    }
+  ],
+  "rules": [
+    "No TLS-verification bypass.",
+    "Verification sources are not forecast sources.",
+    "Historical context is not used after its valid time.",
+    "NCUM readiness requires an authorized import manifest plus checksum-matching numerical file."
+  ],
+  "schema_version": 1
+}

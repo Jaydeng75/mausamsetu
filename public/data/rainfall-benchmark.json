@@ -1,0 +1,239 @@
+{
+  "acceptance_passed": false,
+  "calibration_period": "2020-01 through 2020-02",
+  "crps_difference_vs_static_95ci": [
+    -0.021939254854165237,
+    -0.004838178700165709
+  ],
+  "data_kind": "forecast",
+  "data_manifest": {
+    "datasets": {
+      "ERA5": "https://storage.googleapis.com/weatherbench2/datasets/era5/1959-2023_01_10-6h-240x121_equiangular_with_poles_conservative.zarr",
+      "GraphCast-WB2": "https://storage.googleapis.com/weatherbench2/datasets/graphcast/2020/date_range_2019-11-16_2021-02-01_12_hours-240x121_equiangular_with_poles_conservative.zarr",
+      "IFS-HRES-WB2": "https://storage.googleapis.com/weatherbench2/datasets/hres/2016-2022-0012-240x121_equiangular_with_poles_conservative.zarr"
+    },
+    "initializations": 36,
+    "negative_regridding_values_clipped_to_zero": {
+      "GraphCast-WB2:168": 74,
+      "GraphCast-WB2:24": 698,
+      "GraphCast-WB2:72": 102,
+      "IFS-HRES-WB2:168": 0,
+      "IFS-HRES-WB2:24": 0,
+      "IFS-HRES-WB2:72": 0
+    },
+    "retrieved_at": "2026-09-26T15:35:02.844656+00:00",
+    "sha256": "b113d2f4aac46a01766d0d86224132bc809c892509adfc536d13412f92d13473",
+    "units": "mm/24h",
+    "use": "retrospective research; ERA5 reference; not live as-of replay",
+    "variable": "total_precipitation_24hr",
+    "year": 2020
+  },
+  "eligible_for_production": false,
+  "event_metrics": {
+    "Adaptive mixture": [
+      {
+        "brier": 0.02109482469321915,
+        "events": 701,
+        "far": 0.26198083067092653,
+        "pod": 0.6590584878744651,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 20.0
+      },
+      {
+        "brier": 0.0015140889740081892,
+        "events": 35,
+        "far": 0.36363636363636365,
+        "pod": 0.4,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 64.5
+      },
+      {
+        "brier": 5.802014241065227e-05,
+        "events": 1,
+        "far": null,
+        "pod": 0.0,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 115.6
+      }
+    ],
+    "Equal mixture": [
+      {
+        "brier": 0.02285925485848253,
+        "events": 701,
+        "far": 0.4041013268998794,
+        "pod": 0.7047075606276747,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 20.0
+      },
+      {
+        "brier": 0.0017411244351132453,
+        "events": 35,
+        "far": 0.6382978723404256,
+        "pod": 0.4857142857142857,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 64.5
+      },
+      {
+        "brier": 0.0001152247708834408,
+        "events": 1,
+        "far": 1.0,
+        "pod": 0.0,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 115.6
+      }
+    ],
+    "Static mixture": [
+      {
+        "brier": 0.021434152130729453,
+        "events": 701,
+        "far": 0.2608,
+        "pod": 0.6590584878744651,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 20.0
+      },
+      {
+        "brier": 0.0015792482845740133,
+        "events": 35,
+        "far": 0.36363636363636365,
+        "pod": 0.4,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 64.5
+      },
+      {
+        "brier": 8.09584581063573e-05,
+        "events": 1,
+        "far": null,
+        "pod": 0.0,
+        "probability_cutoff": 0.5,
+        "threshold_mm": 115.6
+      }
+    ]
+  },
+  "experiment": "IFS-HRES + GraphCast 24-hour rainfall; India-region bounding box on shared 1.5-degree grid",
+  "failure_cases": [
+    {
+      "adaptive_minus_static_crps": 8.025442037488698,
+      "initialization": "2020-12-01T00:00:00.000000000",
+      "lat": 9.0,
+      "lead_hours": 72,
+      "lon": 79.5,
+      "observed_mm": 62.19641876220703
+    },
+    {
+      "adaptive_minus_static_crps": 6.944591336341162,
+      "initialization": "2020-11-21T00:00:00.000000000",
+      "lat": 10.499999999999996,
+      "lead_hours": 72,
+      "lon": 81.0,
+      "observed_mm": 67.55794525146484
+    },
+    {
+      "adaptive_minus_static_crps": 6.048526715663979,
+      "initialization": "2020-09-11T00:00:00.000000000",
+      "lat": 16.499999999999993,
+      "lead_hours": 24,
+      "lon": 72.0,
+      "observed_mm": 114.31206512451172
+    },
+    {
+      "adaptive_minus_static_crps": 5.570603670271389,
+      "initialization": "2020-10-11T00:00:00.000000000",
+      "lat": 18.0,
+      "lead_hours": 72,
+      "lon": 78.0,
+      "observed_mm": 77.26762390136719
+    },
+    {
+      "adaptive_minus_static_crps": 4.980661706316507,
+      "initialization": "2020-10-11T00:00:00.000000000",
+      "lat": 18.0,
+      "lead_hours": 72,
+      "lon": 76.5,
+      "observed_mm": 55.0064811706543
+    }
+  ],
+  "initializations": 36,
+  "lead_hours": [
+    24,
+    72,
+    168
+  ],
+  "limitations": [
+    "ERA5 is reanalysis rather than independent Indian gauge observations.",
+    "GraphCast is ERA5-initialized retrospective output, not a real-time as-of replay.",
+    "Only three initialization dates per month are sampled; event-block uncertainty remains limited.",
+    "The regional box includes ocean and neighboring countries; this is not an India land-only score.",
+    "Calibration is pooled over the domain and regridded negative precipitation artifacts are clipped to zero.",
+    "The held-out sample contains only one case above 115.6 mm/24h; no severe-tail skill conclusion can be drawn.",
+    "The within-2020 seasonal split is a bounded demonstration, not a multi-year cross-season generalization test.",
+    "This does not validate the live GFS/AIFS roster, NEPS/NCUM, station-scale rainfall, or official warnings."
+  ],
+  "reference": "ERA5 reanalysis, not independent gauge observations",
+  "schema_version": 1,
+  "scores": [
+    {
+      "bias": 0.1837442062525301,
+      "crps": 2.0345313898461623,
+      "distribution": "deterministic point mass",
+      "mae": 2.0345313898461623,
+      "model": "IFS-HRES-WB2 raw",
+      "rmse": 5.494463406123365
+    },
+    {
+      "bias": 0.2113164231952176,
+      "crps": 1.5188579339209478,
+      "distribution": "deterministic point mass",
+      "mae": 1.5188579339209478,
+      "model": "GraphCast-WB2 raw",
+      "rmse": 3.6404082470433985
+    },
+    {
+      "bias": 0.2147006913819264,
+      "crps": 1.2605397665191505,
+      "distribution": "nonnegative empirical residual mixture",
+      "mae": 1.6350141050932367,
+      "model": "Equal mixture",
+      "rmse": 3.992514744010284
+    },
+    {
+      "bias": 0.1939703190584588,
+      "crps": 1.2080542746824892,
+      "distribution": "nonnegative empirical residual mixture",
+      "mae": 1.540078605801105,
+      "model": "Static mixture",
+      "rmse": 3.6939163545540628
+    },
+    {
+      "bias": 0.12094747515280657,
+      "crps": 1.1949271333443778,
+      "distribution": "nonnegative empirical residual mixture",
+      "mae": 1.4945193439147115,
+      "model": "Adaptive mixture",
+      "rmse": 3.553364691625172
+    }
+  ],
+  "selected_regularization": 0.1,
+  "test_cases": 17388,
+  "test_event_blocks": 12,
+  "test_initializations": 12,
+  "test_period": "2020-09 through 2020-12",
+  "training_cases": 17388,
+  "training_period": "2020-03 through 2020-06",
+  "units": "mm/24h",
+  "upstream_training_audited": true,
+  "validation_candidates": [
+    {
+      "crps": 2.537636676886738,
+      "regularization": 0.01
+    },
+    {
+      "crps": 2.5326974194938496,
+      "regularization": 0.1
+    },
+    {
+      "crps": 2.5436892378798315,
+      "regularization": 1.0
+    }
+  ],
+  "validation_period": "2020-07 through 2020-08"
+}

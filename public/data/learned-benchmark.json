@@ -1,0 +1,219 @@
+{
+  "acceptance_passed": false,
+  "by_lead": [
+    {
+      "crps": 0.8127734116134269,
+      "lead": 24,
+      "model": "IFS-HRES-WB2 calibrated"
+    },
+    {
+      "crps": 0.4162474039726937,
+      "lead": 24,
+      "model": "Pangu-WB2 calibrated"
+    },
+    {
+      "crps": 0.505504576020853,
+      "lead": 24,
+      "model": "Equal mixture"
+    },
+    {
+      "crps": 0.4230292597674893,
+      "lead": 24,
+      "model": "Static mixture"
+    },
+    {
+      "crps": 0.41263004241182544,
+      "lead": 24,
+      "model": "Adaptive mixture"
+    },
+    {
+      "crps": 0.8547492837546088,
+      "lead": 72,
+      "model": "IFS-HRES-WB2 calibrated"
+    },
+    {
+      "crps": 0.522053956406476,
+      "lead": 72,
+      "model": "Pangu-WB2 calibrated"
+    },
+    {
+      "crps": 0.5833193633933244,
+      "lead": 72,
+      "model": "Equal mixture"
+    },
+    {
+      "crps": 0.5197714782162994,
+      "lead": 72,
+      "model": "Static mixture"
+    },
+    {
+      "crps": 0.5135234861469726,
+      "lead": 72,
+      "model": "Adaptive mixture"
+    },
+    {
+      "crps": 1.0185775126615828,
+      "lead": 168,
+      "model": "IFS-HRES-WB2 calibrated"
+    },
+    {
+      "crps": 0.7654667867561259,
+      "lead": 168,
+      "model": "Pangu-WB2 calibrated"
+    },
+    {
+      "crps": 0.7605154535311842,
+      "lead": 168,
+      "model": "Equal mixture"
+    },
+    {
+      "crps": 0.7335562741241022,
+      "lead": 168,
+      "model": "Static mixture"
+    },
+    {
+      "crps": 0.7219327720881735,
+      "lead": 168,
+      "model": "Adaptive mixture"
+    }
+  ],
+  "calibration_years": [
+    2018
+  ],
+  "crps_difference_vs_static_95ci": [
+    -0.014776686675969208,
+    -0.003556371723257249
+  ],
+  "data_kind": "forecast",
+  "data_manifest": {
+    "datasets": {
+      "ERA5": "https://storage.googleapis.com/weatherbench2/datasets/era5/1959-2023_01_10-6h-240x121_equiangular_with_poles_conservative.zarr",
+      "IFS-HRES-WB2": "https://storage.googleapis.com/weatherbench2/datasets/hres/2016-2022-0012-240x121_equiangular_with_poles_conservative.zarr",
+      "Pangu-WB2": "https://storage.googleapis.com/weatherbench2/datasets/pangu/2018-2022_0012_240x121_equiangular_with_poles_conservative.zarr"
+    },
+    "initializations": 180,
+    "retrieved_at": "2026-09-26T12:01:04.528890+00:00",
+    "sha256": "6e05518f1f9d9fa34cfcf6870900b5046c4766c534bedec15d3b99aa9373aaa9",
+    "units": "degree_Celsius",
+    "use": "local retrospective research; not a live as-of replay or licensed operational deployment",
+    "variable": "2m_temperature",
+    "years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ]
+  },
+  "eligible_for_production": false,
+  "experiment": "IFS-HRES + Pangu temperature; India-region bounding box on shared 1.5-degree grid",
+  "initializations": 180,
+  "latitude_points": 21,
+  "lead_hours": [
+    24,
+    72,
+    168
+  ],
+  "limitations": [
+    "Retrospective experiment: ERA5-initialized Pangu is not a real-time as-of replay.",
+    "Three initialization dates per month; not every event, station or forecast cycle.",
+    "Bounding box includes adjacent countries and ocean cells; this is not an India land-only score.",
+    "Temperature only; this experiment does not establish rainfall, wind or extreme-weather skill.",
+    "Only 12 monthly bootstrap blocks; uncertainty estimates remain imprecise.",
+    "Source calibration pooled across the domain. Local coverage needs separate validation.",
+    "Different source roster from live GFS/AIFS; weights must never be transferred to those models.",
+    "Dataset-specific redistribution rights and upstream checkpoint identity require review before deployment."
+  ],
+  "longitude_points": 23,
+  "reference": "ERA5 reanalysis, not independent station observations",
+  "schema_version": 1,
+  "scores": [
+    {
+      "bias": -0.27466934951760635,
+      "crps": 1.2245332858332145,
+      "distribution": "deterministic point mass",
+      "mae": 1.2245332858332145,
+      "model": "IFS-HRES-WB2 raw",
+      "rmse": 1.7674150621156988
+    },
+    {
+      "bias": 0.022735988825824418,
+      "crps": 0.7377651912696799,
+      "distribution": "deterministic point mass",
+      "mae": 0.7377651912696799,
+      "model": "Pangu-WB2 raw",
+      "rmse": 1.162342187235759
+    },
+    {
+      "bias": 0.07691841649394815,
+      "crps": 0.895366736009873,
+      "distribution": "empirical calibrated residual mixture",
+      "mae": 1.201086462547204,
+      "model": "IFS-HRES-WB2 calibrated",
+      "rmse": 1.7476353144446268
+    },
+    {
+      "bias": 0.09882167528241015,
+      "crps": 0.5679227157117653,
+      "distribution": "empirical calibrated residual mixture",
+      "mae": 0.7353515001385095,
+      "model": "Pangu-WB2 calibrated",
+      "rmse": 1.1663139196981533
+    },
+    {
+      "bias": 0.08787004588817914,
+      "crps": 0.6164464643151205,
+      "distribution": "empirical calibrated residual mixture",
+      "mae": 0.833990164304178,
+      "model": "Equal mixture",
+      "rmse": 1.266673111753107
+    },
+    {
+      "bias": 0.09492338440732491,
+      "crps": 0.5587856707026303,
+      "distribution": "empirical calibrated residual mixture",
+      "mae": 0.7264102239211896,
+      "model": "Static mixture",
+      "rmse": 1.1441200111569827
+    },
+    {
+      "bias": 0.112930297050597,
+      "crps": 0.5493621002156572,
+      "distribution": "empirical calibrated residual mixture",
+      "mae": 0.7233960410079965,
+      "model": "Adaptive mixture",
+      "rmse": 1.14359409973147
+    }
+  ],
+  "selected_regularization": 0.01,
+  "test_cases": 52164,
+  "test_event_blocks": 12,
+  "test_initializations": 36,
+  "test_years": [
+    2022
+  ],
+  "training_cases": 104328,
+  "training_years": [
+    2019,
+    2020
+  ],
+  "units": "degC",
+  "upstream_training_audited": false,
+  "validation_candidates": [
+    {
+      "crps": 0.5624626236638294,
+      "regularization": 0.01
+    },
+    {
+      "crps": 0.5677725302795777,
+      "regularization": 0.1
+    },
+    {
+      "crps": 0.5720292425281691,
+      "regularization": 1.0
+    }
+  ],
+  "validation_years": [
+    2021
+  ]
+}

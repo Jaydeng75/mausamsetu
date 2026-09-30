@@ -1,0 +1,15 @@
+services:
+ gateway:
+  image: caddy:2
+  restart: unless-stopped
+  network_mode: host
+  environment:
+   MAUSAM_API_HOSTNAME: api.140.245.4.200.sslip.io
+  volumes:
+   - ./Caddyfile.public:/etc/caddy/Caddyfile:ro
+   - /srv/mausamsetu/state/public:/public:ro
+   - caddy-data:/data
+   - caddy-config:/config
+volumes:
+ caddy-data:
+ caddy-config:

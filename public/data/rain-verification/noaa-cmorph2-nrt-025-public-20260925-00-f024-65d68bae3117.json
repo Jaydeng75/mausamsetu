@@ -1,0 +1,134 @@
+{
+  "forecast_asset": "public-20260925-00-3262d053254d.json",
+  "forecast_sha256": "aa901eb3571888cc9215aa61996e6709f15bd267ed887dd8d1ba99455f4d9722",
+  "generated_at": "2026-09-26T20:29:34.726261+00:00",
+  "lead_hours": 24,
+  "limitations": [
+    "Satellite precipitation is a verification reference, not gauge ground truth.",
+    "Forecast values are the current browser-grid fields; this is not an operational calibration study.",
+    "Scores from CMORPH and IMERG are kept separate and are not pooled.",
+    "Equal blend is an uncalibrated deterministic baseline."
+  ],
+  "reference_id": "noaa-cmorph2-nrt-025",
+  "reference_kind": "satellite precipitation estimate",
+  "reference_product": "NOAA CPC CMORPH2 NRT 0.25\u00b0 30-minute",
+  "reference_revision": "CMORPH2NRT",
+  "reference_values_sha256": "8ffb0652c2655038870c0d7067a9fcc60cb73dcfb54b188e28d3bcf6e18b4600",
+  "run_id": "public-20260925-00",
+  "schema_version": 1,
+  "scores": [
+    {
+      "bias": 0.3484635613213059,
+      "mae": 5.1402321439604455,
+      "model": "GFS",
+      "n": 1224,
+      "rmse": 12.174674188002106,
+      "thresholds": {
+        "115.6": {
+          "bias": 0.3484635613213059,
+          "brier": 0.004901960784313725,
+          "coverage_fraction": 1.0,
+          "csi": 0.0,
+          "false_alarms": 4,
+          "far": 1.0,
+          "hits": 0,
+          "mae": 5.1402321439604455,
+          "misses": 2,
+          "n": 1224,
+          "pod": 0.0,
+          "rmse": 12.174674188002106
+        },
+        "64.5": {
+          "bias": 0.3484635613213059,
+          "brier": 0.022058823529411766,
+          "coverage_fraction": 1.0,
+          "csi": 0.2702702702702703,
+          "false_alarms": 16,
+          "far": 0.6153846153846154,
+          "hits": 10,
+          "mae": 5.1402321439604455,
+          "misses": 11,
+          "n": 1224,
+          "pod": 0.47619047619047616,
+          "rmse": 12.174674188002106
+        }
+      }
+    },
+    {
+      "bias": 0.15066209073307046,
+      "mae": 4.470121555324801,
+      "model": "AIFS",
+      "n": 1224,
+      "rmse": 10.321650593243307,
+      "thresholds": {
+        "115.6": {
+          "bias": 0.15066209073307046,
+          "brier": 0.0024509803921568627,
+          "coverage_fraction": 1.0,
+          "csi": 0.0,
+          "false_alarms": 1,
+          "far": 1.0,
+          "hits": 0,
+          "mae": 4.470121555324801,
+          "misses": 2,
+          "n": 1224,
+          "pod": 0.0,
+          "rmse": 10.321650593243307
+        },
+        "64.5": {
+          "bias": 0.15066209073307046,
+          "brier": 0.021241830065359478,
+          "coverage_fraction": 1.0,
+          "csi": 0.21212121212121213,
+          "false_alarms": 12,
+          "far": 0.631578947368421,
+          "hits": 7,
+          "mae": 4.470121555324801,
+          "misses": 14,
+          "n": 1224,
+          "pod": 0.3333333333333333,
+          "rmse": 10.321650593243307
+        }
+      }
+    },
+    {
+      "bias": 0.2495628260271879,
+      "mae": 4.571049222507378,
+      "model": "Equal blend",
+      "n": 1224,
+      "rmse": 10.640854975500389,
+      "thresholds": {
+        "115.6": {
+          "bias": 0.2495628260271879,
+          "brier": 0.004084967320261438,
+          "coverage_fraction": 1.0,
+          "csi": 0.0,
+          "false_alarms": 3,
+          "far": 1.0,
+          "hits": 0,
+          "mae": 4.571049222507378,
+          "misses": 2,
+          "n": 1224,
+          "pod": 0.0,
+          "rmse": 10.640854975500389
+        },
+        "64.5": {
+          "bias": 0.2495628260271879,
+          "brier": 0.018790849673202614,
+          "coverage_fraction": 1.0,
+          "csi": 0.30303030303030304,
+          "false_alarms": 12,
+          "far": 0.5454545454545454,
+          "hits": 10,
+          "mae": 4.571049222507378,
+          "misses": 11,
+          "n": 1224,
+          "pod": 0.47619047619047616,
+          "rmse": 10.640854975500389
+        }
+      }
+    }
+  ],
+  "valid_end": "2026-09-26T00:00:00+00:00",
+  "valid_start": "2026-09-25T00:00:00+00:00"
+}

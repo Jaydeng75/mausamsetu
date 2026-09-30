@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {validateProduct,fieldValues,gridIndex,forecastAgeHours} from '../lib/public-data.ts';
+const root=new URL('../public/data/products/',import.meta.url);
+let india,globalProduct;
+for(const filename of ['latest.json','global-latest.json','weatherbench-latest.json']){
+ const manifest=JSON.parse(await readFile(new URL(filename,root),'utf8'));
+ const body=await readFile(new URL(manifest.path,root));
+ assert.equal(createHash('sha256').update(body).digest('hex'),manifest.sha256);
+ const product=JSON.parse(body.toString());validateProduct(product);
+ if(filename==='latest.json')india=product;
+ if(filename==='global-latest.json')globalProduct=product;
+ console.log(filename,product.run_id,product.leads.length,'leads checked');
+}
+const invalid=structuredClone(india);
+const source=Object.keys(invalid.sources)[0],lead=invalid.leads[0];
+invalid.sources[source][String(lead)].rain[0]=-1;
+assert.throws(()=>validateProduct(invalid),/Invalid/);
+const missing=structuredClone(india);
+missing.sources[source][String(lead)].rain[0]=null;
+assert.equal(fieldValues(missing,'Equal blend',lead,'rain')[0],null);
+assert.equal(gridIndex({data_kind:'historical_evaluation',latitude:[0],longitude:[-179,0,175]},0,179.9),0);
+assert.equal(forecastAgeHours(india,Date.parse(india.initialization)+3600000),1);
+assert.deepEqual(india.source_leads.IFS,[24,48,72,96,120,144,168]);
+assert.equal(fieldValues(india,'IFS',30,'temperature').length,0);
+const lead30=['GFS','GEFS','AIFS'].map(name=>india.sources[name]['30'].temperature[0]);
+assert.equal(fieldValues(india,'Equal blend',30,'temperature')[0],lead30.reduce((a,b)=>a+b,0)/lead30.length);
+assert.equal(globalProduct.coverage,'global');
+assert.deepEqual(Object.keys(globalProduct.sources),['GFS','GEFS','IFS','AIFS']);
+assert.equal(globalProduct.source_roles.GEFS,'ensemble_mean');
+assert.ok(globalProduct.ensemble_context.GEFS.member_count>1);
+assert.equal(globalProduct.ensemble_context.GEFS.member_count_source,'GRIB numberOfForecastsInEnsemble');
+assert.deepEqual(globalProduct.leads,[24,48,72,96,120,144,168]);
+assert.ok(gridIndex(globalProduct,51.5,-0.1)>=0,'London must be inside the live global grid');
+assert.ok(fieldValues(globalProduct,'Equal blend',24,'temperature').some(Number.isFinite));
+console.log('Public product checksums, India/global contracts, missingness, dateline and freshness checks passed.');

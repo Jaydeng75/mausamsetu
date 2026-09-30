@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-27T18:27:10Z",
+  "revision": "feature/live-global-20260927; multi-variable acceptance + IMD gauge + production security",
+  "state": "running_research_deployment",
+  "checks": [
+    {
+      "name": "Backend regression",
+      "status": "passed",
+      "detail": "117 backend tests passed, including Open-Meteo historical fallback, ERA5 reference normalization, IMD exact-window reconstruction, +24/+48/+72 multi-variable shadow candidates, extreme-event gates, all 10 missing-source patterns, OIDC/TLS production preflight and recovery controls."
+    },
+    {
+      "name": "Connected browser workflow",
+      "status": "passed",
+      "detail": "19 Playwright tests passed against the deployed Docker application, including live global four-source forecasts, multi-shadow acceptance matrix, IMD gauge-grid semantics and research-only withholding."
+    },
+    {
+      "name": "Numerical data integrity",
+      "status": "passed",
+      "detail": "GFS, GEFS ensemble statistics, IFS, AIFS, WeatherBench and India/global products passed checksum, grid, lead, missingness and source-role contracts."
+    },
+    {
+      "name": "Satellite rainfall verification",
+      "status": "passed",
+      "detail": "CMORPH2 NRT and IMERG Early V07 run as separate exact-window satellite precipitation references and are never pooled as gauge truth."
+    },
+    {
+      "name": "IMD gauge-grid verification",
+      "status": "passed",
+      "detail": "Public IMD 0.25-degree daily gauge-gridded binary is decoded and compared on the exact 03:00-03:00 UTC window. A real 26 Sep 00 UTC +24 case completed over 316 finite collocated cells."
+    },
+    {
+      "name": "Multi-variable live-roster matrix",
+      "status": "passed",
+      "detail": "Nine research candidates are generated: rainfall, 2 m temperature and paired U/V wind at +24/+48/+72 h for the exact GFS/GEFS/IFS/AIFS roster. No candidate is production-active."
+    },
+    {
+      "name": "Extreme and degraded-source gates",
+      "status": "passed",
+      "detail": "Rainfall tracks 64.5/115.6/204.5 mm event support and skill; every candidate evaluates 4 single-source plus 6 two-source outages with skill and degradation limits. Current evidence correctly fails acceptance where support is insufficient."
+    },
+    {
+      "name": "Open-Meteo historical fallback",
+      "status": "passed",
+      "detail": "Pinned IFS/AIFS Single Runs and ERA5 Archive transport are supported only for retrospective bootstrap/reference acceleration, with UTC run/model pinning, no elevation downscaling request, cached response SHA-256 and zero prospective credit."
+    },
+    {
+      "name": "Production security engineering",
+      "status": "passed",
+      "detail": "Fail-closed HTTPS/OIDC production overlay, Caddy, oauth2-proxy, backend JWKS verification, explicit token policy, role separation, CORS restrictions and owner-only secret preflight are implemented and regression-tested."
+    },
+    {
+      "name": "Running operations",
+      "status": "passed",
+      "detail": "Local Docker deployment is healthy with India/global GFS/GEFS/IFS/AIFS ingestion, CMORPH/IMERG, IMD gauge worker, multi-shadow refresh, daily backup and zero active operations alerts."
+    }
+  ],
+  "production_gates": [
+    {
+      "name": "Prospective live-roster validation",
+      "status": "evaluation_required",
+      "detail": "Historical/bootstrap automation is complete, but production evidence cannot be fabricated. Current live-roster shadow evidence has zero prospective blocks; acceptance still requires at least 30 total, 10 prospective and 6 held-out independent daily blocks plus skill gates."
+    },
+    {
+      "name": "Gauge-based India verification",
+      "status": "active_validation",
+      "detail": "Public IMD 0.25-degree daily gauge-gridded exact-window verification is implemented and running. More independent windows/seasons are still required before a production skill claim; this product is gauge-gridded analysis, not raw station truth."
+    },
+    {
+      "name": "NCUM and operational NEPS",
+      "status": "access_required",
+      "detail": "Delayed NEPS research access exists, but verified latest-cycle NEPS and authorized NCUM operational numerical feeds remain external institutional dependencies."
+    },
+    {
+      "name": "Multi-variable and extreme-event acceptance",
+      "status": "evaluation_required",
+      "detail": "Rainfall/temperature/wind +24/+48/+72 candidates, 10-pattern outage matrices and 64.5/115.6/204.5 mm extreme gates are implemented. The current six-block bootstrap has only two held-out blocks and zero prospective blocks, so no candidate is accepted."
+    },
+    {
+      "name": "Institutional identity and permissions",
+      "status": "external_configuration_required",
+      "detail": "The HTTPS/OIDC/role/secret production profile is engineering-complete and fail-closed. The institution must supply real DNS, OIDC tenant/client, allowed domains, reviewer/approver identities and source-distribution approvals; demo credentials are intentionally not substituted."
+    },
+    {
+      "name": "Always-on hosting and off-site operations",
+      "status": "deployment_required",
+      "detail": "The active system still runs on the local Mac Docker stack. Approved always-on hosting, off-site backups, external paging/firewall policy and operational ownership remain required."
+    }
+  ]
+}

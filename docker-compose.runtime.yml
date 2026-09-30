@@ -1,0 +1,129 @@
+# Docker-native local deployment; no Docker socket is exposed to application workers.
+services:
+  volume-init:
+    build: ./backend
+    user: '0:0'
+    command: ['python', '-m', 'mausam.volume_init']
+    network_mode: none
+    volumes:
+      - public-products:/public
+      - provider-cache:/cache
+      - run-backups:/backups
+      - ./public/data/products:/seed-public:ro
+      - ${MAUSAM_SEED_CACHE:-./provider-seed}:/seed-cache:ro
+  api:
+    environment:
+      MAUSAM_PUBLIC_PRODUCTS: 'true'
+      MAUSAM_PUBLIC_DIR: /public
+    volumes:
+      - public-products:/public:ro
+    depends_on:
+      volume-init: {condition: service_completed_successfully}
+  ingest-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.ingest
+    restart: unless-stopped
+    environment: {MAUSAM_DATA_DIR: /data}
+    volumes:
+      - forecast-data:/data
+      - public-products:/public
+      - provider-cache:/cache
+      - run-backups:/backups
+      - ./public:/host-budget:ro
+    depends_on:
+      volume-init: {condition: service_completed_successfully}
+      api: {condition: service_healthy}
+      db-backup: {condition: service_healthy}
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+  rain-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.ingest
+    command: ['python','-m','mausam.rain_service','--runtime','/data','--cache','/cache','--public','/public','--netrc','/run/secrets/earthdata_netrc','--loop','--interval','3600','--max-windows','4']
+    restart: unless-stopped
+    environment: {MAUSAM_DATA_DIR: /data}
+    volumes:
+      - forecast-data:/data
+      - public-products:/public
+      - provider-cache:/cache
+    secrets:
+      - source: earthdata_netrc
+        target: earthdata_netrc
+    depends_on:
+      volume-init: {condition: service_completed_successfully}
+      api: {condition: service_healthy}
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+  imd-gauge-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.ingest
+    command: ['python','-m','mausam.imd_gauge','--runtime','/data','--cache','/cache','--public','/public','--loop','--interval','3600','--max-windows','1','--latency-hours','6']
+    restart: unless-stopped
+    environment: {MAUSAM_DATA_DIR: /data}
+    volumes:
+      - forecast-data:/data
+      - public-products:/public
+      - provider-cache:/cache
+    depends_on:
+      volume-init: {condition: service_completed_successfully}
+      api: {condition: service_healthy}
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+  db-backup:
+    image: postgis/postgis:16-3.4
+    user: '10001:10001'
+    entrypoint: ['/bin/bash', '/opt/database-backup.sh']
+    restart: unless-stopped
+    environment:
+      PGHOST: postgres
+      PGUSER: mausam
+      PGDATABASE: mausam
+      PGCONNECT_TIMEOUT: '5'
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Set the database password}
+    volumes:
+      - run-backups:/backups
+      - ./deploy/database-backup.sh:/opt/database-backup.sh:ro
+    depends_on:
+      volume-init: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: ['CMD-SHELL', 'test -s /backups/db/$$(date -u +%Y%m%d).dump']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  web:
+    image: mausamsetu-web:sih-20260926
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    environment:
+      MAUSAM_PUBLIC_BACKEND_URL: http://api:8000
+      NODE_ENV: production
+    ports: ['127.0.0.1:4173:3000']
+    volumes: ['./public/data:/app/public/data:ro']
+    restart: unless-stopped
+    depends_on:
+      api: {condition: service_healthy}
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/api/runtime').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  public-products:
+  provider-cache:
+  run-backups:
+secrets:
+  earthdata_netrc:
+    file: ${EARTHDATA_NETRC_PATH:-./deploy/empty.netrc}

@@ -1,0 +1,66 @@
+# OCI Ampere A1 overlay. Keeps the research deployment private on loopback.
+# Apply after docker-compose.yml and docker-compose.runtime.yml.
+services:
+  postgres:
+    image: mausamsetu-postgis:16-arm64
+    build:
+      context: .
+      dockerfile: deploy/oci/Dockerfile.postgis
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/postgres:/var/lib/postgresql/data
+
+  api:
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/forecast:/data
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/public:/public:ro
+
+  replay-worker:
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/forecast:/data
+  migrate:
+    platform: linux/arm64
+
+  volume-init:
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/public:/public
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/cache:/cache
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/backups:/backups
+
+  ingest-worker:
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/forecast:/data
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/public:/public
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/cache:/cache
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/backups:/backups
+      - ./public:/host-budget:ro
+
+  rain-worker:
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/forecast:/data
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/public:/public
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/cache:/cache
+  imd-gauge-worker:
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/forecast:/data
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/public:/public
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/cache:/cache
+
+  db-backup:
+    image: mausamsetu-postgis:16-arm64
+    platform: linux/arm64
+    volumes:
+      - ${MAUSAM_STATE_DIR:-/srv/mausamsetu/state}/backups:/backups
+      - ./deploy/database-backup.sh:/opt/database-backup.sh:ro
+
+  web:
+    platform: linux/arm64
+    # Keep localhost-only until Caddy/OIDC production cut-over.
+    ports:
+      - 127.0.0.1:4173:3000

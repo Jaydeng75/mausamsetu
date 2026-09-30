@@ -1,0 +1,129 @@
+# Institution-facing hardening overlay.
+# Use only with an external owner-only env file that passes deploy/production-preflight.py.
+services:
+  api:
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    environment:
+      MAUSAM_ENV: production
+      PYTHONDONTWRITEBYTECODE: '1'
+      MAUSAM_ALLOW_ANONYMOUS_READ: 'false'
+      MAUSAM_EXTERNAL_URL: ${MAUSAM_EXTERNAL_URL:?Configure the institutional HTTPS URL}
+      OIDC_ISSUER: ${OIDC_ISSUER:?Configure the institutional HTTPS issuer}
+      OIDC_AUDIENCE: ${OIDC_AUDIENCE:?Configure the application audience}
+      OIDC_JWKS_URL: ${OIDC_JWKS_URL:?Configure the institutional HTTPS JWKS URL}
+      OIDC_ALGORITHM: ${OIDC_ALGORITHM:-RS256}
+      OIDC_ROLES_CLAIM: ${OIDC_ROLES_CLAIM:-realm_access.roles}
+      OIDC_MAX_TOKEN_AGE_SECONDS: ${OIDC_MAX_TOKEN_AGE_SECONDS:-3600}
+      CORS_ORIGINS: ${CORS_ORIGINS:?Configure explicit approved origins}
+      DATABASE_URL: postgresql+psycopg://mausam:${POSTGRES_PASSWORD:?Set a production database password}@postgres/mausam
+
+  web:
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    pids_limit: 128
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: '1'
+      MAUSAM_PUBLIC_BACKEND_URL: http://api:8000
+
+  replay-worker:
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    environment: {PYTHONDONTWRITEBYTECODE: '1'}
+
+  ingest-worker:
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    environment: {PYTHONDONTWRITEBYTECODE: '1'}
+
+  rain-worker:
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    environment: {PYTHONDONTWRITEBYTECODE: '1'}
+
+  imd-gauge-worker:
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    environment: {PYTHONDONTWRITEBYTECODE: '1'}
+
+  db-backup:
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    pids_limit: 128
+
+  migrate:
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  postgres:
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a production database password}
+
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.4
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    environment:
+      OAUTH2_PROXY_PROVIDER: oidc
+      OAUTH2_PROXY_OIDC_ISSUER_URL: ${OIDC_ISSUER:?Configure institutional OIDC}
+      OAUTH2_PROXY_CLIENT_ID: ${OIDC_CLIENT_ID:?Configure OIDC client ID}
+      OAUTH2_PROXY_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:?Configure OIDC client secret}
+      OAUTH2_PROXY_COOKIE_SECRET: ${OIDC_COOKIE_SECRET:?Configure a random cookie secret}
+      OAUTH2_PROXY_REDIRECT_URL: https://${MAUSAM_HOSTNAME:?Configure hostname}/oauth2/callback
+      OAUTH2_PROXY_UPSTREAMS: http://web:3000/
+      OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+      OAUTH2_PROXY_EMAIL_DOMAINS: ${OIDC_ALLOWED_EMAIL_DOMAINS:?Configure explicit institutional email domains}
+      OAUTH2_PROXY_SCOPE: openid profile email
+      OAUTH2_PROXY_COOKIE_SECURE: 'true'
+      OAUTH2_PROXY_COOKIE_SAMESITE: lax
+      OAUTH2_PROXY_REVERSE_PROXY: 'true'
+      OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: 'true'
+      OAUTH2_PROXY_PASS_ACCESS_TOKEN: 'true'
+      OAUTH2_PROXY_SET_XAUTHREQUEST: 'true'
+      OAUTH2_PROXY_SKIP_AUTH_PREFLIGHT: 'false'
+    depends_on:
+      web: {condition: service_healthy}
+
+  caddy:
+    image: caddy:2.11.4-alpine
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    environment:
+      MAUSAM_HOSTNAME: ${MAUSAM_HOSTNAME:?Configure the approved hostname}
+    ports: ['80:80','443:443']
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      oauth2-proxy: {condition: service_started}
+
+volumes:
+  caddy-data:
+  caddy-config:

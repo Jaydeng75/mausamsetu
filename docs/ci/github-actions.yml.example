@@ -1,0 +1,27 @@
+name: Validate MausamSetu
+on: [push, pull_request]
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24', cache: npm}
+      - run: npm ci
+      - run: node scripts/prepare-map.mjs
+      - run: npm run typecheck
+      - run: npm run test:science
+      - run: npm run test:data
+      - run: npm run test:preparedness
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - run: npm audit --omit=dev --audit-level=high
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -e './backend[test]'
+      - run: pytest backend/tests -q

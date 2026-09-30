@@ -1,0 +1,57 @@
+services:
+  api:
+    restart: unless-stopped
+    build: ./backend
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      MAUSAM_DATA_DIR: /data
+      MAUSAM_PUBLIC_PRODUCTS: ${MAUSAM_PUBLIC_PRODUCTS:-false}
+      MAUSAM_PUBLIC_DIR: /public
+      DATABASE_URL: postgresql+psycopg://mausam:${POSTGRES_PASSWORD:-local-development-only}@postgres/mausam
+      MAUSAM_ALLOW_ANONYMOUS_READ: ${MAUSAM_ALLOW_ANONYMOUS_READ:-false}
+      OIDC_ISSUER: ${OIDC_ISSUER:-}
+      OIDC_AUDIENCE: ${OIDC_AUDIENCE:-mausamsetu}
+      OIDC_JWKS_URL: ${OIDC_JWKS_URL:-}
+    volumes: ["forecast-data:/data", "./public/data/products:/public:ro"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+  replay-worker:
+    restart: unless-stopped
+    build: ./backend
+    command: ["python", "-m", "mausam.worker"]
+    environment:
+      MAUSAM_DATA_DIR: /data
+      DATABASE_URL: postgresql+psycopg://mausam:${POSTGRES_PASSWORD:-local-development-only}@postgres/mausam
+    volumes: ["forecast-data:/data"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      migrate: {condition: service_completed_successfully}
+  migrate:
+    build: ./backend
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://mausam:${POSTGRES_PASSWORD:-local-development-only}@postgres/mausam
+    depends_on:
+      postgres: {condition: service_healthy}
+  postgres:
+    restart: unless-stopped
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: mausam
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-development-only}
+      POSTGRES_DB: mausam
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U mausam -d mausam"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  forecast-data:
+  postgres-data:

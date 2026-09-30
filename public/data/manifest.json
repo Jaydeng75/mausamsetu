@@ -1,0 +1,18 @@
+{
+  "run_id": "demo-20260926-00-v1",
+  "initialization_time": "2026-09-26T00:00:00Z",
+  "published_at": "2026-09-26T01:15:00Z",
+  "data_kind": "synthetic",
+  "model_version": "illustrative-gate-v1",
+  "processing_version": "0.1.0",
+  "grid": "analytical demonstration field; display sampled on a 220 × 220 raster; no claimed scientific resolution",
+  "source_names": [
+    "NEPS",
+    "AIFS",
+    "NCUM",
+    "GFS"
+  ],
+  "source_notice": "All model sources are simulated. NCUM/NEPS authorization and historical validation are pending.",
+  "scientific_status": "unvalidated",
+  "verification_cases": 2880
+}

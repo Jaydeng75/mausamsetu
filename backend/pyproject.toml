@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "mausamsetu"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.115,<1", "uvicorn[standard]>=0.32,<1", "pydantic-settings>=2.7,<3", "sqlalchemy>=2.0,<3", "alembic>=1.14,<2", "numpy>=2,<3", "scipy>=1.14,<2", "xarray>=2024.11", "netCDF4>=1.7", "httpx>=0.28,<1", "PyJWT[crypto]>=2.10,<3", "prometheus-client>=0.21,<1"]
+[project.optional-dependencies]
+public-data = ["cfgrib>=0.9", "eccodes>=2", "ecmwf-opendata>=0.3.34", "fsspec[http]>=2024.11", "gcsfs>=2025.1", "dask[array]>=2024.11", "zarr>=2.18,<3", "cdsapi>=0.7.7"]
+science = ["torch>=2.6", "cfgrib>=0.9", "eccodes>=2", "dask[array]>=2024.11", "zarr>=2.18,<3", "rasterio>=1.4", "xesmf>=0.8", "prefect>=3,<4", "mlflow>=2.19", "boto3>=1.35"]
+postgres = ["psycopg[binary]>=3.2"]
+test = ["pytest>=8", "httpx>=0.28", "PyYAML>=6,<7"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mausam*"]
+exclude = ["tests*", "migrations*"]

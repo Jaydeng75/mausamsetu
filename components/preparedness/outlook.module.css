@@ -1,0 +1,8 @@
+.outlook{border-top:1px solid #2e4252;padding-top:18px;margin-top:24px}
+.outlook>p{font-size:11px;color:#9eb7c8;margin:9px 0}
+.outlook>div:last-of-type{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}
+.outlook button{padding:8px 3px;border:1px solid #314f60;background:#142a38;border-radius:6px;color:#d6e7ee;cursor:pointer;outline-offset:3px}
+.outlook button[aria-pressed=true]{border-color:#75d9c9;background:#1d4546}
+.outlook button span,.outlook button small{display:block;font-size:9px;color:#a9c6d1}
+.outlook button strong{display:block;font-size:14px;margin:5px 0;color:#eef7fa}
+.outlook>small{display:block;font-size:10px;color:#91adbd;line-height:1.7}

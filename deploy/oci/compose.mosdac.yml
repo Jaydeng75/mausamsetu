@@ -1,0 +1,16 @@
+services:
+ mosdac-worker:
+  build:
+   context: ../..
+   dockerfile: deploy/oci/Dockerfile.mosdac
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  mem_limit: 512m
+  cpus: 0.5
+  command: [--root, /archive, --public, /public, --credentials, /run/secrets/mosdac, --loop]
+  volumes:
+   - /srv/mausamsetu/state/mosdac:/archive
+   - /srv/mausamsetu/state/public:/public
+   - /srv/mausamsetu/secrets/mosdac.json:/run/secrets/mosdac:ro
