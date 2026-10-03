@@ -298,8 +298,8 @@ def public_status():
             result['global_forecast']={'state':'available','run_id':global_product['run_id'],'initialization':global_product['initialization'],'sources':global_product.get('source_status',{}),'leads':global_product.get('leads',[])}
         except (OSError,ValueError,KeyError):result['global_forecast']={'state':'invalid'}
     else:result['global_forecast']={'state':'not_published'}
-    from .operational_health import apply_health
-    return apply_health(result)
+    from .operational_health import apply_health, attach_mosdac
+    return apply_health(attach_mosdac(result, path.parent))
 
 @app.get('/public/rain-verification')
 def public_rain_verification():

@@ -159,8 +159,8 @@ def run_once(config):
                     status['validation']['imd_latest_window']=max((x['forecast_window_end'] for x in rows),default=None)
             except (OSError,ValueError,KeyError):
                 status['alerts'].append({'severity':'warning','code':'validation_status_invalid','message':'Validation status could not be read.'})
-        from .operational_health import apply_health
-        apply_health(status)
+        from .operational_health import apply_health, attach_mosdac
+        apply_health(attach_mosdac(status, public))
         status['alert_delivery']='local_operations_dashboard_and_event_log'
         status['next_check_seconds']=int(config.get('interval_seconds',3600))
         status['checked_at']=iso()

@@ -125,6 +125,7 @@ def cycle(root, public, credentials, client=None):
                   'Raw MOSDAC files remain private; only derived regional summaries are published.',
                   'Exact-window verification requires a complete time series and independently validated accumulation semantics.'],
               'latest': previous.get('latest')}
+    session_username = None
     own = client is None
     client = client or httpx.Client(timeout=45, follow_redirects=False)
     try:
@@ -154,11 +155,13 @@ def cycle(root, public, credentials, client=None):
                             auth = json.loads(credentials.read_text())
                             r = client.post(ORIGIN+'/download_api/gettoken', json={'username':auth['username'], 'password':auth['password']})
                             if r.status_code in (400,401,403):
-                                atomic(rejected, {'checked_at': utcnow().isoformat()})
+                                atomic(rejected, {'checked_at': utcnow().isoformat(), 'http_status': r.status_code})
                                 status['state'] = 'authentication_rejected'
                                 break
                             r.raise_for_status()
+                            session_username = auth['username']
                             token = r.json()['access_token']
+                            rejected.unlink(missing_ok=True)
                         tmp = path.with_suffix('.part')
                         try:
                             with client.stream('GET', ORIGIN+'/download_api/download', params={'id':str(entry['id'])}, headers={'Authorization':'Bearer '+token}) as response:
@@ -205,6 +208,16 @@ def cycle(root, public, credentials, client=None):
         status['state'] = 'unavailable'
         status['error_type'] = type(error).__name__  # no provider body, URLs with tokens or secrets
     finally:
+        # Follow the provider client lifecycle, including failed downloads.
+        # Never publish account names, tokens or provider response bodies.
+        if session_username is not None:
+            try:
+                response = client.post(ORIGIN+'/download_api/logout',
+                                       json={'username': session_username}, timeout=15)
+                response.raise_for_status()
+                status['session_cleanup'] = 'complete'
+            except Exception:
+                status['session_cleanup'] = 'failed'
         if own:
             client.close()
     if status.get('latest'):

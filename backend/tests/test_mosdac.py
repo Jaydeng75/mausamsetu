@@ -68,3 +68,39 @@ def test_rejected_auth_is_not_retried_and_last_good_is_retained(tmp_path):
     assert first['state']==second['state']=='authentication_rejected'
     assert calls.count('/download_api/gettoken')==1
     assert 'password' not in (public/'mosdac-status.json').read_text()
+
+@pytest.mark.parametrize('download_ok,logout_ok', [(True,True),(False,True),(True,False)])
+def test_authenticated_cycle_always_logs_out(tmp_path, download_ok, logout_ok):
+    import json,httpx
+    p,e=product(tmp_path);e['id']=123
+    credentials=tmp_path/'credentials.json'
+    credentials.write_text(json.dumps({'username':'test','password':'test-only'}))
+    calls=[]
+    def respond(request):
+        calls.append(request.url.path)
+        if request.url.path.endswith('datasets.json'):return httpx.Response(200,json={'entries':[e]})
+        if request.url.path.endswith('gettoken'):return httpx.Response(200,json={'access_token':'test-token'})
+        if request.url.path.endswith('logout'):
+            assert json.loads(request.content)=={'username':'test'}
+            return httpx.Response(200 if logout_ok else 503)
+        return httpx.Response(200,content=p.read_bytes()) if download_ok else httpx.Response(503)
+    with httpx.Client(transport=httpx.MockTransport(respond)) as client:
+        result=m.cycle(tmp_path/'archive',tmp_path/'public',credentials,client)
+    assert calls.count('/download_api/logout')==1
+    assert result['session_cleanup']==('complete' if logout_ok else 'failed')
+    if not download_ok:assert result['state']=='unavailable'
+    assert 'test-token' not in json.dumps(result)
+
+
+def test_context_failure_and_recovery_recompute_health(tmp_path):
+    import json
+    from mausam.operational_health import apply_health,attach_mosdac
+    now=datetime(2026,10,3,tzinfo=timezone.utc)
+    p=tmp_path/'mosdac-status.json'
+    p.write_text(json.dumps({'state':'authentication_rejected','checked_at':now.isoformat()}))
+    state=apply_health(attach_mosdac({},tmp_path),now)
+    assert state['status']=='degraded'
+    p.write_text(json.dumps({'state':'available','checked_at':now.isoformat(),'session_cleanup':'complete'}))
+    assert apply_health(attach_mosdac(state,tmp_path),now)['status']=='healthy'
+    p.write_text(json.dumps({'state':'available','checked_at':'2026-10-01T00:00:00+00:00'}))
+    assert apply_health(attach_mosdac(state,tmp_path),now)['alerts'][0]['code']=='mosdac_status_stale'

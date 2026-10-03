@@ -59,6 +59,9 @@ The Vercel `/api/mosdac` route proxies that summary; `/sih#mosdac` renders it.
 - Authentication rejection suspends retries until credential file mtime changes.
   Rotate/update credentials privately, then restart the worker.
 - Worker logs contain status/error class only, never provider bodies or secrets.
+- Authenticated cycles call the official logout endpoint in cleanup, including download failures.
+- The API health projection includes MOSDAC failure, stale-status and logout-failure alerts.
+- A rejected login remains paused to prevent account lockout. After a single operator login succeeds, archive the rejection marker and restart only the MOSDAC worker. Do not repeatedly retry invalid credentials.
 - Container runs as non-root, read-only root filesystem, no added capabilities,
   512 MB memory and 0.5 CPU limit; no published ports.
 - Stop only the `mausamsetu-mosdac` compose project to roll back this collector.
